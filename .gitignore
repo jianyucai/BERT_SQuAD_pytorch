@@ -102,3 +102,9 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# mac OS
+.DS_Store
+
+# PyCharm
+.idea/
