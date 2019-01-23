@@ -35,7 +35,7 @@ class EmbeddingLayer(nn.Module):
         if token_type_ids is None:
             token_type_ids = torch.zeros_like(input_ids)
 
-        position_ids = torch.arrange(num_tokens, dtype=torch.long, device=input_ids.device)
+        position_ids = torch.arange(num_tokens, dtype=torch.long, device=input_ids.device)
         position_ids = position_ids.unsqueeze(0).expand_as(input_ids)
 
         words_embeddings = self.word_embeddings(input_ids)
@@ -43,7 +43,7 @@ class EmbeddingLayer(nn.Module):
         token_type_embeddings = self.token_type_embeddings(token_type_ids)
 
         embeddings = words_embeddings + position_embeddings + token_type_embeddings
-        embeddings = self.LayerNorm(embeddings)
+        embeddings = self.norm(embeddings)
         embeddings = self.dropout(embeddings)
         return embeddings
 

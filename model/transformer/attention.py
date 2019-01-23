@@ -14,12 +14,12 @@ def attention(query, key, value, mask=None, dropout_layer=None):
     The return value of Attention Mechanism is
     the weighted combination of the values, where
     the weights are calculated with keys and
-    queries.
+    queries. (d_q = d_k = d_v)
 
     args:
-        query: size (batch_num, query_num, d_q)
-        key:   size (batch_num, key_num, d_k)
-        value: size (batch_num, value_num, d_v)
+        query: size [batch_size, h, sequence_len, d_q]
+        key:   size [batch_size, h, sequence_len, d_k]
+        value: size [batch_size, h, sequence_len, d_v]
         mask:  type torch.ByteTensor
 
     returns:
@@ -32,7 +32,7 @@ def attention(query, key, value, mask=None, dropout_layer=None):
 
     if mask is not None:
         # set value to -inf where mask = 1
-        scores = scores.masked_fill_(mask, -np.inf)
+        scores = scores.masked_fill_(mask == 0, -np.inf)
 
     scores = F.softmax(scores, dim=-1)
 

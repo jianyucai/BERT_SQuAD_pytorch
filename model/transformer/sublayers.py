@@ -27,33 +27,29 @@ class MultiHeadAttention(nn.Module):
         self.dropout_layer = nn.Dropout(p=config.dropout)
 
     def forward(self, query, key, value, mask=None):
-        if mask is not None:
-            # prepare for h heads,
-            # resulting dimension (1, 1, hidden_size, hidden_size)
-            mask = mask.unsqueeze(1)
 
-        batch_num = query.size(0)
+        batch_size = query.size(0)
 
         # 1. Linear Projection for query, key and value,
-        #    resulting dimension (batch_num, h, batch_size, d_k)
+        #    resulting dimension (batch_size, h, sequence_len, d_k)
         query = self.linear_layers[0](query) \
-                .view(batch_num, -1, self.num_heads, self.d_k) \
+                .view(batch_size, -1, self.num_heads, self.d_k) \
                 .transpose(1, 2)
         key = self.linear_layers[1](key) \
-                .view(batch_num, -1, self.num_heads, self.d_k) \
+                .view(batch_size, -1, self.num_heads, self.d_k) \
                 .transpose(1, 2)
         value = self.linear_layers[2](value) \
-                .view(batch_num, -1, self.num_heads, self.d_k) \
+                .view(batch_size, -1, self.num_heads, self.d_k) \
                 .transpose(1, 2)
 
         # 2. Apply Scaled Dot Attention
         attn_output, _ = attention(query, key, value, mask, None)
 
         # 3. Concatenate the num_heads headers
-        # (batch_num, h, batch_size, d_k) => (batch_num, batch_size, h, d_k)
+        # (batch_size, h, sequence_len, d_k) => (batch_size, sequence_len, hidden_size)
         # => (batch_num, batch_size, hidden_size)
         attn_output = attn_output.transpose(1, 2).contiguous() \
-                      .view(batch_num, -1, self.hidden_size)
+                      .view(batch_size, -1, self.hidden_size)
 
         # 4. Apply the last Linear Projection
         output = self.linear_layers[3](attn_output)

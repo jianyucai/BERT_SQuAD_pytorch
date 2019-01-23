@@ -26,8 +26,8 @@ class TransformerEncoderBlock(nn.Module):
         self.feed_forward_layer = FeedForwardNetwork(config)
         self.residual_layer_2 = ResidualConnection(config)
 
-    def forward(self, input):
-        input = self.residual_layer_1(input, lambda x: self.attention_layer(x, x, x, None))
+    def forward(self, input, attention_mask):
+        input = self.residual_layer_1(input, lambda x: self.attention_layer(x, x, x, attention_mask))
         return self.residual_layer_2(input, self.feed_forward_layer)
 
 
@@ -43,7 +43,7 @@ class TransformerEncoder(nn.Module):
         super(TransformerEncoder, self).__init__()
         self.block_list = cloneModule(TransformerEncoderBlock(config), config.num_blocks)
 
-    def forward(self, input):
+    def forward(self, input, attention_mask):
         for block in self.block_list:
-            input = block(input)
+            input = block(input, attention_mask)
         return input
