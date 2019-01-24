@@ -121,11 +121,11 @@ def load_tf_checkpoint(checkpoint_file_prefix, config_file, pytorch_save_path):
 
         # bert/encoder/layer_0/attention/output/dense/bias
         name = prefix + "attention/output/dense/bias"
-        bert_model.encoder.block_list[layer_idx].attention_layer.linear_layers[2].bias = parameter(name, param_dict)
+        bert_model.encoder.block_list[layer_idx].attention_layer.linear_layers[3].bias = parameter(name, param_dict)
 
         # bert/encoder/layer_0/attention/output/dense/kernel
         name = prefix + "attention/output/dense/kernel"
-        bert_model.encoder.block_list[layer_idx].attention_layer.linear_layers[2].weight = \
+        bert_model.encoder.block_list[layer_idx].attention_layer.linear_layers[3].weight = \
             parameter(name, param_dict, transpose=True)
 
         # bert/encoder/layer_0/attention/self/query/bias
