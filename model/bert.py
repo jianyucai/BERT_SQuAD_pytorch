@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from .layers import EmbeddingLayer
-from .transformer import TransformerEncoder
+from .transformer import TransformerEncoder, LayerNorm
 from .config import BertConfig
 from utils import ToEncoderConf
 from torch.nn import CrossEntropyLoss
@@ -96,6 +96,19 @@ class BertForSquad(nn.Module):
         super(BertForSquad, self).__init__()
         self.bert = BertBasic(config)
         self.output_layer = nn.Linear(config.hidden_size, 2)
+        self.config = config
+        self.apply(self.init_weights)
+
+    def init_weights(self):
+        """ Initialize the weights.
+        """
+        if isinstance(module, (nn.Linear, nn.Embedding)):
+            module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
+        elif isinstance(module, LayerNorm):
+            module.bias.data.zero_()
+            module.weight.data.fill_(1.0)
+        if isinstance(module, nn.Linear) and module.bias is not None:
+            module.bias.data.zero_()
 
     def forward(self, input_ids, token_type_ids=None, attention_mask=None,
                 start_positions=None, end_positions=None):
