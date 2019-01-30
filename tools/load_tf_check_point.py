@@ -92,7 +92,7 @@ def load_tf_checkpoint(checkpoint_file_prefix, config_file, pytorch_save_path):
     bert_model.embeddings.word_embeddings.weight = parameter(name, param_dict)
 
     # bert/embeddings/position_embeddings
-    name = "bert/embeddings/word_embeddings"
+    name = "bert/embeddings/position_embeddings"
     bert_model.embeddings.position_embeddings.weight = parameter(name, param_dict)
 
     # bert/embeddings/token_type_embeddings
@@ -113,11 +113,11 @@ def load_tf_checkpoint(checkpoint_file_prefix, config_file, pytorch_save_path):
 
         # bert/encoder/layer_0/attention/output/LayerNorm/beta
         name = prefix + "attention/output/LayerNorm/beta"
-        bert_model.encoder.block_list[layer_idx].residual_layer_1.bias = parameter(name, param_dict)
+        bert_model.encoder.block_list[layer_idx].residual_layer_1.norm.bias = parameter(name, param_dict)
 
         # bert/encoder/layer_0/attention/output/LayerNorm/gamma
         name = prefix + "attention/output/LayerNorm/gamma"
-        bert_model.encoder.block_list[layer_idx].residual_layer_1.weight = parameter(name, param_dict)
+        bert_model.encoder.block_list[layer_idx].residual_layer_1.norm.weight = parameter(name, param_dict)
 
         # bert/encoder/layer_0/attention/output/dense/bias
         name = prefix + "attention/output/dense/bias"
@@ -166,11 +166,11 @@ def load_tf_checkpoint(checkpoint_file_prefix, config_file, pytorch_save_path):
 
         # bert/encoder/layer_0/output/LayerNorm/beta
         name = prefix + "output/LayerNorm/beta"
-        bert_model.encoder.block_list[layer_idx].residual_layer_2.bias = parameter(name, param_dict)
+        bert_model.encoder.block_list[layer_idx].residual_layer_2.norm.bias = parameter(name, param_dict)
 
         # bert/encoder/layer_0/output/LayerNorm/gamma
         name = prefix + "output/LayerNorm/gamma"
-        bert_model.encoder.block_list[layer_idx].residual_layer_2.weight = parameter(name, param_dict)
+        bert_model.encoder.block_list[layer_idx].residual_layer_2.norm.weight = parameter(name, param_dict)
 
         # bert/encoder/layer_0/output/dense/bias
         name = prefix + "output/dense/bias"
