@@ -95,6 +95,7 @@ class ResidualConnection(nn.Module):
     def forward(self, x, sublayer):
         return x + self.dropout(sublayer(self.norm(x)))
 
+
 class LayerNorm(nn.Module):
     def __init__(self, hidden_size, eps=1e-12):
         """Construct a layernorm module in the TF style (epsilon inside the square root).
