@@ -33,7 +33,6 @@ class BertConfig(object):
             The vocabulary size of the `token_type_ids`, default: 2
         vocab_size:
             Vocabulary size for input sequences, default: 30522 (by WordPiece)
-
     """
 
     def __init__(self,
@@ -41,7 +40,7 @@ class BertConfig(object):
                  hidden_act='gelu',
                  hidden_dropout_prob=0.1,
                  hidden_size=768,
-                 initializer_range=0.2,
+                 initializer_range=0.02,
                  intermediate_size=3072,
                  max_position_embeddings=512,
                  num_attention_heads=12,
